@@ -1,10 +1,18 @@
-const express = require("express")
+const express = require("express");
+const cors = require("cors");
 
 const PORT = 3000;
 const app = express();
 
-app.get("/", (req, res) => {
-    res.send('<h1>Hello World!</h1>')
-})
+app.use(cors());
+app.use(express.json());
 
-app.listen(PORT, ()=>console.log(`Server started at port:${PORT}`))
+app.post("/api/contact", (req, res) => {
+  const { name, email } = req.body;
+  console.log("Received form data:", name, email);
+  res.json({ message: "Form received successfully", data: req.body });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
