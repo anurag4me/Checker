@@ -1,61 +1,34 @@
 import React, { useState } from "react";
+import DragComponent from "../components/DragComponent";
 
 function Home() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [file, setFile] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append("answer", file);
+
     try {
-      const res = await fetch("http://localhost:3000/api/contact", {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/uploads`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email }),
+        body: formData,
       });
       const data = await res.json();
       console.log("Server Response:", data);
     } catch (err) {
       console.error("Error submitting form", err);
     }
-
-    setName("");
-    setEmail("");
+    
+    setFile(null);
   };
 
   return (
-    <div className="w-full h-screen">
-      <h1>Welcome to Home page</h1>
-
-      <form className="max-w-sm mx-auto" method="post" onSubmit={handleSubmit}>
-        <div className="mb-5">
-          <input
-            type="name"
-            id="name"
-            className="px-3 py-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg "
-            placeholder="Enter full name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-5">
-          <input
-            type="email"
-            id="email"
-            className="px-3 py-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg "
-            placeholder="name@flowbite.com"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <button
-          type="submit"
-          className="px-5 py-2 text-white bg-blue-700 rounded-xl"
-        >
+    <div className="w-full h-screen bg-amber-200">
+      <form className="flex flex-col h-screen justify-center items-center" method="post" onSubmit={handleSubmit} encType="multipart/form-data" >
+        <DragComponent onChange={(file) => setFile(file)} />
+        <button type="submit" className="mt-5 w-134 px-5 py-2 text-white bg-black rounded-xl cursor-pointer" >
           Submit
         </button>
       </form>
