@@ -1,38 +1,18 @@
-import React, { useState } from "react";
-import DragComponent from "../components/DragComponent";
+import React from "react";
+import { AnswerChecker } from "../components/AnswerChecker";
 
 function Home() {
-  const [file, setFile] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("answer", file);
-
-    try {
-      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/uploads`, {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      console.log("Server Response:", data);
-    } catch (err) {
-      console.error("Error submitting form", err);
-    }
-    
-    setFile(null);
-  };
-
   return (
-    <div className="w-full h-screen bg-amber-200">
-      <form className="flex flex-col h-screen justify-center items-center" method="post" onSubmit={handleSubmit} encType="multipart/form-data" >
-        <DragComponent onChange={(file) => setFile(file)} />
-        <button type="submit" className="mt-5 w-134 px-5 py-2 text-white bg-black rounded-xl cursor-pointer" >
-          Submit
-        </button>
-      </form>
-    </div>
+    <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">AI Answer Checker</h1>
+          <p className="mt-3 text-xl text-gray-500">Upload an answer sheet PDF and get AI-verified results</p>
+        </div>
+
+        <AnswerChecker />
+      </div>
+    </main>
   );
 }
 
